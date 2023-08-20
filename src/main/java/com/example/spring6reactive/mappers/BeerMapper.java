@@ -4,7 +4,7 @@ import com.example.spring6reactive.domain.Beer;
 import com.example.spring6reactive.model.BeerDTO;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface BeerMapper {
     Beer beerDtoToBeer(BeerDTO dto);
 
