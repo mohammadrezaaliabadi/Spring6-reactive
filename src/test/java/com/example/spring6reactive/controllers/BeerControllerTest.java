@@ -21,11 +21,12 @@ class BeerControllerTest {
 
     @Test
     void deleteById() {
+        webTestClient.delete()
+                .uri(BeerController.BEER_PATH_ID,1)
+                .exchange()
+                .expectStatus().isNoContent();
     }
 
-    @Test
-    void patchExistingBeer() {
-    }
 
     @Test
     void updateExistingBeer() {
