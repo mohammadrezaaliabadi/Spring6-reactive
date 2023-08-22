@@ -26,6 +26,11 @@ class CustomerControllerTest {
 
     @Test
     void updateExistingCustomer() {
+        webTestClient.put()
+                .uri(CustomerController.CUSTOMER_PATH_ID, 1)
+                .body(Mono.just(getCustomerDto()), CustomerDTO.class)
+                .exchange()
+                .expectStatus().isNoContent();
     }
 
     @Test
