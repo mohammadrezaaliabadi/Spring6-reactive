@@ -21,6 +21,15 @@ class CustomerControllerTest {
     @Autowired
     WebTestClient webTestClient;
     @Test
+    void testPatchIdNotFound() {
+        webTestClient.patch()
+                .uri(CustomerController.CUSTOMER_PATH_ID, 999)
+                .body(Mono.just(getCustomerDto()), CustomerDTO.class)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testUpdateCustomerNotFound() {
         webTestClient.put()
                 .uri(CustomerController.CUSTOMER_PATH_ID, 999)
