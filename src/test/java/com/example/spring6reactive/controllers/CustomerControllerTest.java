@@ -20,6 +20,13 @@ class CustomerControllerTest {
 
     @Autowired
     WebTestClient webTestClient;
+
+    @Test
+    void testGetByIdNotFound() {
+        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 999)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
     @Order(999)
     @Test
     void deleteById() {
