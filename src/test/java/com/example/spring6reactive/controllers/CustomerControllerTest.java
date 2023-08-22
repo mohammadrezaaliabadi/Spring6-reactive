@@ -1,5 +1,6 @@
 package com.example.spring6reactive.controllers;
 
+import com.example.spring6reactive.model.CustomerDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -32,6 +33,11 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerById() {
+        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals("Content-type", "application/json")
+                .expectBody(CustomerDTO.class);
     }
 
     @Test
