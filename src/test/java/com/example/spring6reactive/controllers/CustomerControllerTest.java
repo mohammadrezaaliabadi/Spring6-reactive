@@ -18,6 +18,11 @@ class CustomerControllerTest {
 
     @Test
     void deleteById() {
+        webTestClient.delete()
+                .uri(CustomerController.CUSTOMER_PATH_ID, 1)
+                .exchange()
+                .expectStatus()
+                .isNoContent();
     }
 
     @Test
