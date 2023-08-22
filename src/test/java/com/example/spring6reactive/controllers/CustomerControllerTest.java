@@ -1,7 +1,10 @@
 package com.example.spring6reactive.controllers;
 
 import com.example.spring6reactive.model.CustomerDTO;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,13 +12,15 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @AutoConfigureWebTestClient
 class CustomerControllerTest {
 
     @Autowired
     WebTestClient webTestClient;
-
+    @Order(999)
     @Test
     void deleteById() {
         webTestClient.delete()
@@ -30,6 +35,7 @@ class CustomerControllerTest {
     }
 
     @Test
+    @Order(3)
     void updateExistingCustomer() {
         webTestClient.put()
                 .uri(CustomerController.CUSTOMER_PATH_ID, 1)
@@ -49,6 +55,7 @@ class CustomerControllerTest {
     }
 
     @Test
+    @Order(1)
     void getCustomerById() {
         webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
                 .exchange()
@@ -58,6 +65,7 @@ class CustomerControllerTest {
     }
 
     @Test
+    @Order(2)
     void listCustomers() {
         webTestClient.get().uri(CustomerController.CUSTOMER_PATH)
                 .exchange()
