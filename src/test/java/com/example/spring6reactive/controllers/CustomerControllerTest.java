@@ -38,6 +38,19 @@ class CustomerControllerTest {
     }
 
     @Test
+    @Order(4)
+    void testUpdateCustomerBadRequest() {
+        CustomerDTO customerDto = getCustomerDto();
+        customerDto.setCustomerName("");
+
+        webTestClient.put()
+                .uri(CustomerController.CUSTOMER_PATH_ID, 1)
+                .body(Mono.just(customerDto), CustomerDTO.class)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
     void testUpdateCustomerNotFound() {
         webTestClient.put()
                 .uri(CustomerController.CUSTOMER_PATH_ID, 999)
