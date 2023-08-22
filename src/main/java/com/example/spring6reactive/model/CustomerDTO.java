@@ -1,5 +1,7 @@
 package com.example.spring6reactive.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 public class CustomerDTO {
 
     private Integer id;
+    @NotBlank
     private String customerName;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
