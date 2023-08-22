@@ -54,7 +54,8 @@ public class BeerController {
 
     @GetMapping(BEER_PATH_ID)
     Mono<BeerDTO> getBeerById(@PathVariable("beerId") Integer beerId) {
-        return beerService.getBeerById(beerId);
+        return beerService.getBeerById(beerId)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
 
