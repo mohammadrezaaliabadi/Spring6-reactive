@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -29,6 +30,12 @@ class CustomerControllerTest {
 
     @Test
     void createNewCustomer() {
+        webTestClient.post().uri(CustomerController.CUSTOMER_PATH)
+                .body(Mono.just(getCustomerDto()), CustomerDTO.class)
+                .header("Content-Type", "application/json")
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().location("http://localhost:8080/api/v2/customer/4");
     }
 
     @Test
@@ -47,5 +54,11 @@ class CustomerControllerTest {
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
                 .expectBody().jsonPath("$.size()").isEqualTo(3);
+    }
+
+    public static CustomerDTO getCustomerDto() {
+        return CustomerDTO.builder()
+                .customerName("Test Customer")
+                .build();
     }
 }
