@@ -12,6 +12,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockOAuth2Login;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
@@ -22,7 +23,8 @@ class CustomerControllerTest {
     WebTestClient webTestClient;
     @Test
     void testPatchIdNotFound() {
-        webTestClient.patch()
+        webTestClient.mutateWith(mockOAuth2Login())
+                .patch()
                 .uri(CustomerController.CUSTOMER_PATH_ID, 999)
                 .body(Mono.just(getCustomerDto()), CustomerDTO.class)
                 .exchange()
@@ -31,7 +33,8 @@ class CustomerControllerTest {
 
     @Test
     void testDeleteNotFound() {
-        webTestClient.delete()
+        webTestClient.mutateWith(mockOAuth2Login())
+                .delete()
                 .uri(CustomerController.CUSTOMER_PATH_ID, 999)
                 .exchange()
                 .expectStatus().isNotFound();
@@ -43,7 +46,8 @@ class CustomerControllerTest {
         CustomerDTO customerDto = getCustomerDto();
         customerDto.setCustomerName("");
 
-        webTestClient.put()
+        webTestClient.mutateWith(mockOAuth2Login())
+                .put()
                 .uri(CustomerController.CUSTOMER_PATH_ID, 1)
                 .body(Mono.just(customerDto), CustomerDTO.class)
                 .exchange()
@@ -52,7 +56,8 @@ class CustomerControllerTest {
 
     @Test
     void testUpdateCustomerNotFound() {
-        webTestClient.put()
+        webTestClient.mutateWith(mockOAuth2Login())
+                .put()
                 .uri(CustomerController.CUSTOMER_PATH_ID, 999)
                 .body(Mono.just(getCustomerDto()), CustomerDTO.class)
                 .exchange()
@@ -61,14 +66,16 @@ class CustomerControllerTest {
 
     @Test
     void testGetByIdNotFound() {
-        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 999)
+        webTestClient.mutateWith(mockOAuth2Login())
+                .get().uri(CustomerController.CUSTOMER_PATH_ID, 999)
                 .exchange()
                 .expectStatus().isNotFound();
     }
     @Order(999)
     @Test
     void deleteById() {
-        webTestClient.delete()
+        webTestClient.mutateWith(mockOAuth2Login())
+                .delete()
                 .uri(CustomerController.CUSTOMER_PATH_ID, 1)
                 .exchange()
                 .expectStatus()
@@ -82,7 +89,8 @@ class CustomerControllerTest {
     @Test
     @Order(3)
     void updateExistingCustomer() {
-        webTestClient.put()
+        webTestClient.mutateWith(mockOAuth2Login())
+                .put()
                 .uri(CustomerController.CUSTOMER_PATH_ID, 1)
                 .body(Mono.just(getCustomerDto()), CustomerDTO.class)
                 .exchange()
@@ -91,7 +99,8 @@ class CustomerControllerTest {
 
     @Test
     void createNewCustomer() {
-        webTestClient.post().uri(CustomerController.CUSTOMER_PATH)
+        webTestClient.mutateWith(mockOAuth2Login())
+                .post().uri(CustomerController.CUSTOMER_PATH)
                 .body(Mono.just(getCustomerDto()), CustomerDTO.class)
                 .header("Content-Type", "application/json")
                 .exchange()
@@ -102,7 +111,8 @@ class CustomerControllerTest {
     @Test
     @Order(1)
     void getCustomerById() {
-        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
+        webTestClient.mutateWith(mockOAuth2Login())
+                .get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
@@ -112,7 +122,8 @@ class CustomerControllerTest {
     @Test
     @Order(2)
     void listCustomers() {
-        webTestClient.get().uri(CustomerController.CUSTOMER_PATH)
+        webTestClient.mutateWith(mockOAuth2Login())
+                .get().uri(CustomerController.CUSTOMER_PATH)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")

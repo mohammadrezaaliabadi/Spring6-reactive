@@ -14,7 +14,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http) throws Exception {
-        http.authorizeExchange(authorize->
+        http.csrf(ServerHttpSecurity.CsrfSpec::disable).authorizeExchange(authorize->
             authorize.anyExchange().authenticated()
         ).oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(Customizer.withDefaults()));
